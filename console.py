@@ -2,7 +2,7 @@
 """ Console Module """
 import cmd
 import sys
-from models.base_model import BaseModel
+
 from models.__init__ import storage
 from models.user import User
 from models.place import Place
@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
@@ -19,15 +20,15 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+            }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
-             'number_rooms': int, 'number_bathrooms': int,
-             'max_guest': int, 'price_by_night': int,
-             'latitude': float, 'longitude': float
+            'number_rooms': int, 'number_bathrooms': int,
+            'max_guest': int, 'price_by_night': int,
+            'latitude': float, 'longitude': float
             }
 
     def preloop(self):
@@ -75,7 +76,7 @@ class HBNBCommand(cmd.Cmd):
                     # check for *args or **kwargs
                     if pline[0] is '{' and pline[-1] is '}'\
                             and type(eval(pline)) is dict:
-                        _args = pline
+                                _args = pline
                     else:
                         _args = pline.replace(',', '')
                         # _args = _args.replace('\"', '')
@@ -123,12 +124,12 @@ class HBNBCommand(cmd.Cmd):
             for attr in my_list[1:]:
                 my_att = attr.split('=')
                 try:
-                    c = HBNBCommand.verify_attribute(my_att[1])
+                    casted = HBNBCommand.verify_attribute(my_att[1])
                 except Exception:
                     continue
-                if not c:
+                if not casted:
                     continue
-                setattr(obj, my_att[0], c)
+                setattr(obj, my_att[0], casted)
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:

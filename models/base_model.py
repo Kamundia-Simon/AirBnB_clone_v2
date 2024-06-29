@@ -1,29 +1,43 @@
 #!/usr/bin/python3
 """This module defines a base class for all models in our hbnb clone"""
 import uuid
-import models
+from uuid import uuid4
 from datetime import datetime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import String
-from models import storage
+from os import environ
 
-Base = declarative_base()
+from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+
+import models
+
+if environ.get('HBNB_TYPE_STORAGE') == 'db':
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel:
-    """A base class for all hbnb models"""
+    id = Column(String(60), unique=True, primary_key=True, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
-        self.id = str(uuid4())
-        self.created_at = self.updated_at = datetime.utcnow()
+        """Inst a new model"""
+        updated_set = flag_created_at = False
         if kwargs:
             for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
+                if key == "created_at":
+                    flag_created_at = True
+                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                elif key == "updated_at":
+                    updated_set = True
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                 if key != "__class__":
                     setattr(self, key, value)
+        if not flag_created_at:
+            self.created_at = datetime.now()
+        if not updated_set:
+            self.updated_at = datetime.now()
+        self.id = str(uuid.uuid4())
 
     def __str__(self):
         """Returns a string representation of the instance"""
