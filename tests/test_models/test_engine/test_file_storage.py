@@ -4,6 +4,7 @@ import unittest
 from models.base_model import BaseModel
 from models import storage
 import os
+from models.engine.file_storage import FileStorage
 
 
 class test_fileStorage(unittest.TestCase):
@@ -112,13 +113,17 @@ class test_fileStorage(unittest.TestCase):
         """Delete test"""
         bm = BaseModel()
         key = "{}.{}".format(type(bm).__name__, bm.id)
-        FileStorage._FileStorage__objects[key] = bm
+        self.storage.new(bm)
         self.storage.delete(bm)
-        self.assertNotIn(bm, FileStorage._FileStorage__objects)
+        self.assertNotIn(key, self.storage.all())
 
-    def test_delete_nonexistant(self):
-        """Delete non-existant object"""
+    def test_delete_nonexistent(self):
+        """Delete non-existent object"""
         try:
             self.storage.delete(BaseModel())
         except Exception:
             self.fail
+
+
+if __name__ == "__main__":
+    unittest.main()
