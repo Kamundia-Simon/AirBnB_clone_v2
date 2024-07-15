@@ -2,10 +2,8 @@
 #Setup web servers for deployment of web_static
 
 #check if nginx is installed 
-if [[ "$(which nginx | grep -c nginx)" == '0' ]]; then
-    apt-get update
-    apt-get -y install nginx
-fi
+sudo apt-get update
+sudo apt-get -y install nginx
 
 #create  directories 
 sudo mkdir -p /data/
