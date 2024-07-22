@@ -46,4 +46,6 @@ def do_deploy(archive_path):
     if run("ln -s /data/web_static/releases/{}/ /data/web_static/current".
            format(name)).failed is True:
         return False
+    if run("echo '<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\" /><title>AirBnB clone</title></head><body style=\"margin: 0px; padding: 0px;\"><header style=\"height: 70px; width: 100%; background-color: #FF0000\"></header><footer style=\"position: absolute; left: 0; bottom: 0; height: 60px; width: 100%; background-color: #00FF00; text-align: center; overflow: hidden;\"><p style=\"line-height: 60px; margin: 0px;\">Holberton School</p></footer></body></html>' | sudo tee /data/web_static/releases/{}/0-index.html".format(name)).failed:
+        return False
     return True
