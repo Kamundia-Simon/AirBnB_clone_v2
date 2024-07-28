@@ -2,8 +2,13 @@
 <HTML lang="en">
     <HEAD>
         <TITLE>HBNB</TITLE>
-</HEAD>
-<BODY>
-    <h1>Number: {{ n }} is {{ res }}</h1>
-</BODY>
+    </HEAD>
+    <BODY>
+    {% if n is even %}
+        <H1>Number: {{ n }} is even</H1>
+    {% else %}
+        <H1>Number: {{ n }} is odd</H1>
+    {% endif %}
+    </BODY>
 </HTML>
+
