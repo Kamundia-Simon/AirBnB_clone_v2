@@ -3,7 +3,7 @@
 flask web with several routes
 """
 from flask import Flask
-from flask import render_template
+from flask import render_template, abort
 app = Flask(__name__)
 
 
@@ -66,9 +66,11 @@ def number_odd_or_even(n):
             res = 'even'
         else:
             res = 'odd'
+    else:
+        abort(404)
     return render_template('6-number_odd_or_even.html', n=n,
                            res=res)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)
